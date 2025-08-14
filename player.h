@@ -2,8 +2,14 @@
 
 class Player {
   public:
-  float x, y;
-  SDL_Rect rect;
 
-  Player(float x, float y);
+  float speed;
+  SDL_Rect rect;
+  float velocity_x;
+  float velocity_y;
+
+  void update();
+
+  Player();
+  Player(float x, float y, float speed);
 };
