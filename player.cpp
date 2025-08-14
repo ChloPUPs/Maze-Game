@@ -1,8 +1,8 @@
 #include "player.h"
 
-void Player::update() {
-  rect.x += velocity_x;
-  rect.y += velocity_y;
+void Player::updatePhysics(float deltaTime) {
+  rect.x += (int) (velocity_x * deltaTime);
+  rect.y += (int) (velocity_y * deltaTime);
 }
 
 Player::Player() : speed(0), velocity_x(0), velocity_y(0) {

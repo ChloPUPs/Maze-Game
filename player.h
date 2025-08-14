@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <iostream>
 
 class Player {
   public:
@@ -8,7 +9,7 @@ class Player {
   float velocity_x;
   float velocity_y;
 
-  void update();
+  void updatePhysics(float deltaTime);
 
   Player();
   Player(float x, float y, float speed);

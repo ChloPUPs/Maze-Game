@@ -13,17 +13,29 @@ int main(int argc, char* argv[]) {
 
   // Game things
 
-  Player player(0, 0, 10);
+  Player player(0, 0, 300);
 
-  bool isHoldingRightMove = false;
-  bool isHoldingLeftMove = false;
+  bool isHoldingMoveRight = false;
+  bool isHoldingMoveLeft = false;
+  bool isHoldingMoveDown = false;
+  bool isHoldingMoveUp = false;
 
   // Event loop
+
+  Uint64 currentTick;
+  Uint64 lastTick;
+  float deltaTime;
 
   bool running = true;
   SDL_Event e;
 
   while (running) {
+    lastTick = currentTick;
+    currentTick = SDL_GetTicks64();
+    deltaTime = (currentTick - lastTick) / 1000.0f;
+
+    //std::cout << deltaTime << ' ' << (currentTick - lastTick) << '\n';
+
     // Get input
 
     while (SDL_PollEvent(&e)) {
@@ -34,20 +46,32 @@ int main(int argc, char* argv[]) {
             break;
           
           case SDLK_a:
-            isHoldingLeftMove = true;
+            isHoldingMoveLeft = true;
             break;
           case SDLK_d:
-            isHoldingRightMove = true;
+            isHoldingMoveRight = true;
+            break;
+          case SDLK_w:
+            isHoldingMoveUp = true;
+            break;
+          case SDLK_s:
+            isHoldingMoveDown = true;
             break;
         }
       }
       else if (e.type == SDL_KEYUP) {
         switch (e.key.keysym.sym) {
           case SDLK_a:
-            isHoldingLeftMove = false;
+            isHoldingMoveLeft = false;
             break;
           case SDLK_d:
-            isHoldingRightMove = false;
+            isHoldingMoveRight = false;
+            break;
+          case SDLK_w:
+            isHoldingMoveUp = false;
+            break;
+          case SDLK_s:
+            isHoldingMoveDown = false;
             break;
         }
       }
@@ -58,9 +82,10 @@ int main(int argc, char* argv[]) {
 
     // Physics
 
-    player.velocity_x = (isHoldingRightMove - isHoldingLeftMove) * player.speed;
+    player.velocity_x = (isHoldingMoveRight - isHoldingMoveLeft) * player.speed;
+    player.velocity_y = (isHoldingMoveDown - isHoldingMoveUp) * player.speed;
 
-    player.update();
+    player.updatePhysics(deltaTime);
     //std::cout << player.rect.x << "x " << player.rect.y << "y\n";
 
     // Render stuff
