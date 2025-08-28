@@ -5,57 +5,20 @@ void Game::loop() {
     Uint64 lastTick;
     float deltaTime;
 
+    running = true;
+
     SDL_Event e;
 
-    while (true) {
+    while (running) {
         lastTick = currentTick;
         currentTick = SDL_GetTicks64();
         deltaTime = (currentTick - lastTick) / 1000.0f;
 
-        // std::cout << deltaTime << ' ' << (currentTick - lastTick) << '\n';
+        //std::cout << deltaTime << ' ' << (currentTick - lastTick) << '\n';
 
-        // Get input
+        // Handle Events
 
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_KEYDOWN) {
-                switch (e.key.keysym.sym) {
-                    case SDLK_ESCAPE:
-                        return;
-
-                    case SDLK_a:
-                        keyHeld.at("left") = true;
-                        break;
-                    case SDLK_d:
-                        keyHeld.at("right") = true;
-                        break;
-                    case SDLK_w:
-                        keyHeld.at("up") = true;
-                        break;
-                    case SDLK_s:
-                        keyHeld.at("down") = true;
-                        break;
-                }
-            }
-            else if (e.type == SDL_KEYUP) {
-                switch (e.key.keysym.sym) {
-                    case SDLK_a:
-                        keyHeld.at("left") = false;
-                        break;
-                    case SDLK_d:
-                        keyHeld.at("right") = false;
-                        break;
-                    case SDLK_w:
-                        keyHeld.at("up") = false;
-                        break;
-                    case SDLK_s:
-                        keyHeld.at("down") = false;
-                        break;
-                }
-            }
-            else if (e.type == SDL_QUIT) {
-                return;
-            }
-        }
+        handleEvents(e);
 
         // Physics
 
@@ -63,7 +26,7 @@ void Game::loop() {
         player.velocity_y = (keyHeld.at("down") - keyHeld.at("up")) * player.speed;
 
         player.updatePhysics(deltaTime);
-        // std::cout << player.rect.x << "x " << player.rect.y << "y\n";
+        //std::cout << player.rect.x << "x " << player.rect.y << "y\n";
 
         // Render stuff
 
@@ -74,6 +37,49 @@ void Game::loop() {
         SDL_RenderFillRect(renderer, &player.rect);
 
         SDL_RenderPresent(renderer);
+    }
+}
+
+void Game::handleEvents(SDL_Event e) {
+    while (SDL_PollEvent(&e)) {
+        if (e.type == SDL_KEYDOWN) {
+            switch (e.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    running = false;
+
+                case SDLK_a:
+                    keyHeld.at("left") = true;
+                    break;
+                case SDLK_d:
+                    keyHeld.at("right") = true;
+                    break;
+                case SDLK_w:
+                    keyHeld.at("up") = true;
+                    break;
+                case SDLK_s:
+                    keyHeld.at("down") = true;
+                    break;
+            }
+        }
+        else if (e.type == SDL_KEYUP) {
+            switch (e.key.keysym.sym) {
+                case SDLK_a:
+                    keyHeld.at("left") = false;
+                    break;
+                case SDLK_d:
+                    keyHeld.at("right") = false;
+                    break;
+                case SDLK_w:
+                    keyHeld.at("up") = false;
+                    break;
+                case SDLK_s:
+                    keyHeld.at("down") = false;
+                    break;
+            }
+        }
+        else if (e.type == SDL_QUIT) {
+            running = false;
+        }
     }
 }
 

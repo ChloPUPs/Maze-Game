@@ -22,6 +22,10 @@ class Game {
 
     Player player;
 
+    bool running = false;
+
+    void handleEvents(SDL_Event e);
+
     public:
 
     void loop();
