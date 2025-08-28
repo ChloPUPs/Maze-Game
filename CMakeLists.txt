@@ -7,7 +7,7 @@ find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
 
 find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
 
-set(SOURCES src/main.cpp src/player.cpp)
+set(SOURCES src/main.cpp src/player.cpp src/game.cpp)
 add_executable(mazegame WIN32 ${SOURCES})
 
 if(TARGET SDL2::SDL2main)
